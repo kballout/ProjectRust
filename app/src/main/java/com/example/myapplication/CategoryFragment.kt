@@ -6,9 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.ViewModelProvider
 import com.example.myapplication.databinding.FragmentCategoryBinding
-import com.example.myapplication.databinding.FragmentMainBinding
 
 
 class CategoryFragment : Fragment() {

@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.ViewModelProvider
 import com.example.myapplication.databinding.FragmentBottomBinding
 
 
@@ -22,8 +21,8 @@ class BottomFragment : Fragment() {
         _binding = FragmentBottomBinding.inflate(inflater, container, false)
 
         viewModel!!.item.observe(viewLifecycleOwner, { item ->
-            binding.itemName.text = "Item: ${item.toString()}"
-            (activity as MainActivity?)!!.getItemData(changeSpacesToSlashes(),binding.itemImage, binding.itemDescription)
+            binding.itemName.text = "${item.toString()}"
+            (activity as MainActivity?)!!.getItemData(changeSpacesToSlashes(),binding.itemImage, binding.itemDescription, binding.itemID)
         })
 
         return binding.root

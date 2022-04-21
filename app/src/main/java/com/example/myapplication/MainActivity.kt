@@ -1,11 +1,14 @@
 package com.example.myapplication
 
+import android.graphics.Color
+import android.graphics.Typeface
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.Gravity
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.setPadding
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.example.myapplication.databinding.ActivityMainBinding
@@ -60,13 +63,23 @@ class MainActivity : AppCompatActivity() {
                 //create buttons
                 var newBtn: Button? = null
                 var layout = findViewById<LinearLayout>(R.id.linearCategoryLayout)
+                val params: LinearLayout.LayoutParams = LinearLayout.LayoutParams(
+                    700, 200
+                )
+                params.setMargins(0, 20, 0, 0)
                 for (i in 0 until listOfCategories.size){
                     newBtn = Button(this)
-                    newBtn.setLayoutParams(LinearLayout.LayoutParams(700, 200))
                     newBtn.setText(listOfCategories.get(i).toString().lowercase())
+                    newBtn.setPadding(10)
+                    newBtn.setTextColor(Color.parseColor("#ce422b"))
+                    newBtn.setBackgroundColor(Color.parseColor("#1b1b1b"))
+                    newBtn.setTextSize(24.0F)
+                    newBtn.setTypeface(Typeface.DEFAULT_BOLD)
+                    newBtn.layoutParams = params
                     listOfButtons.add(newBtn)
                     layout.addView(newBtn)
                 }
+
                 layout.gravity = Gravity.CENTER
                 for(btn in listOfButtons){
                     btn.setOnClickListener(){

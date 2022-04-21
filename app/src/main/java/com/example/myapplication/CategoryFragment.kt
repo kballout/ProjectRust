@@ -22,7 +22,7 @@ class CategoryFragment : Fragment() {
     ): View? {
         _binding = FragmentCategoryBinding.inflate(inflater, container, false)
         viewModel!!.category.observe(viewLifecycleOwner, { choice ->
-            binding.category.setText(choice)
+            binding.category.setText(choice.replaceFirstChar { it.uppercase() })
         })
         return binding.root
     }

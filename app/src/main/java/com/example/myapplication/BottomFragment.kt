@@ -21,7 +21,7 @@ class BottomFragment : Fragment() {
         _binding = FragmentBottomBinding.inflate(inflater, container, false)
 
         viewModel!!.item.observe(viewLifecycleOwner, { item ->
-            binding.itemName.text = "${item.toString()}"
+            binding.itemName.text = item.toString()
             (activity as MainActivity?)!!.getItemData(changeSpacesToSlashes(),binding.itemImage, binding.itemDescription, binding.itemID)
         })
 

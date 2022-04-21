@@ -31,6 +31,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="57dp"
                 android:textAlignment="center"
+                android:textColor="#F6E9E0"
                 android:textSize="24sp"
                 android:textStyle="bold" />
 
@@ -38,6 +39,7 @@
                 android:id="@+id/itemID"
                 android:layout_width="match_parent"
                 android:layout_height="33dp"
+                android:textColor="#F6E9E0"
                 android:textSize="20sp" />
 
             <TextView
@@ -45,6 +47,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAlignment="textStart"
+                android:textColor="#F6E9E0"
                 android:textSize="24sp" />
 
         </LinearLayout>

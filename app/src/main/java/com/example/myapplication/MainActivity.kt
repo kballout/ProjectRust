@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.Gravity
+import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.setPadding
@@ -124,16 +125,24 @@ class MainActivity : AppCompatActivity() {
     }
 
     //get one item info
-    fun getItemData(choice: String, itemImg: ImageView, itemDescription: TextView, itemID: TextView){
+    fun getItemData(choice: String, itemImg: ImageView, itemDescription: TextView,
+                    itemID: TextView, craftTitle: TextView, reqWorkLevel: TextView,
+                    craftTime: TextView, craftYield: TextView, ingredientsTitle: TextView,
+                    ingredientsList:TextView){
         val executor: ExecutorService = Executors.newSingleThreadExecutor()
         val handler = Handler(Looper.getMainLooper())
 
         if(!choice.equals("")){
             executor.execute {
                 val doc: Document = Jsoup.connect("https://www.corrosionhour.com/rust-items/${choice}").get()
-                val elementById = doc.getElementsByClass("rust-item-list-common-data item-meta-table").get(0)
-                val table = elementById.select("table").get(0)
-                val rows = table.select("tr")
+                val itemInfoTable = doc.getElementsByClass("rust-item-list-common-data item-meta-table").get(0)
+
+                //get crafts if available
+                val itemCraftTable = doc.getElementsByClass("rust-item-crafting-data item-meta-table")
+                val ingredientsTable = doc.getElementsByClass("rust-item-blueprint-data item-meta-table")
+
+                var table = itemInfoTable.select("table").get(0)
+                var rows = table.select("tr")
 
                 handler.post {
                     //item image
@@ -147,9 +156,41 @@ class MainActivity : AppCompatActivity() {
                         if(col.get(0).text().equals("ItemID")){
                             itemID.text = "Item ID: ${col.get(1).text()}"
                         }
-                        if(col.get(0).text().equals("Item Description")){
+                        else if(col.get(0).text().equals("Item Description")){
                             itemDescription.text = "Item Description: ${col.get(1).text()}"
                         }
+                    }
+                    //item craft
+                    if(itemCraftTable.isNotEmpty()){
+                        craftTitle.text = "Crafting Info"
+                        table = itemCraftTable.get(0).select("table").get(0)
+                        rows = table.select("tr")
+                        for (i in 1 until rows.size){
+                            var row = rows.get(i)
+                            var col = row.select("td")
+                            if(col.get(0).text().equals("Required Workbench Level")){
+                                reqWorkLevel.text = "Required Workbench Level: ${col.get(1).text()}"
+                            }
+                            else if(col.get(0).text().equals("Crafting Time")){
+                                craftTime.text = "Crafting Time: ${col.get(1).text()}"
+                            }
+                            else if(col.get(0).text().equals("Crafting Yield")){
+                                craftYield.text = "Crafting Yield: ${col.get(1).text()}"
+                            }
+                        }
+                    }
+                    //item craft
+                    if(ingredientsTable.isNotEmpty()){
+                        ingredientsTitle.text = "Crafting Ingredients"
+                        var list = ""
+                        table = ingredientsTable.get(0).select("table").get(0)
+                        rows = table.select("tr")
+                        for (i in 1 until rows.size){
+                            var row = rows.get(i)
+                            var col = row.select("td")
+                            list += "${col.get(1).text()}: ${col.get(2).text()}\n"
+                        }
+                        ingredientsList.text = list
                     }
                 }
             }

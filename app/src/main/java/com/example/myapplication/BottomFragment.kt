@@ -22,10 +22,26 @@ class BottomFragment : Fragment() {
 
         viewModel!!.item.observe(viewLifecycleOwner, { item ->
             binding.itemName.text = item.toString()
-            (activity as MainActivity?)!!.getItemData(changeSpacesToSlashes(),binding.itemImage, binding.itemDescription, binding.itemID)
+            resetTextViews()
+            (activity as MainActivity?)!!.getItemData(changeSpacesToSlashes(),binding.itemImage, binding.itemDescription,
+                binding.itemID, binding.craftDataTitle, binding.reqWorkLevel, binding.craftingTime, binding.craftingYield,
+                binding.ingredientsTitle, binding.ingredientsList)
         })
 
         return binding.root
+    }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    fun resetTextViews(){
+        binding.craftDataTitle.text = ""
+        binding.reqWorkLevel.text = ""
+        binding.craftingTime.text = ""
+        binding.craftingYield.text = ""
+        binding.ingredientsTitle.text = ""
+        binding.ingredientsList.text = ""
     }
 
     fun changeSpacesToSlashes() : String{

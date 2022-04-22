@@ -10,9 +10,9 @@
 
     <TextView
         android:id="@+id/textView"
-        android:layout_width="311dp"
-        android:layout_height="84dp"
-        android:layout_marginTop="52dp"
+        android:layout_width="320dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="80dp"
         android:fontFamily="sans-serif"
         android:text="@string/choose"
         android:textAlignment="center"
@@ -20,6 +20,7 @@
         android:textSize="34sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -28,7 +29,7 @@
         android:layout_width="408dp"
         android:layout_height="410dp"
         android:layout_marginStart="2dp"
-        android:layout_marginTop="52dp"
+        android:layout_marginTop="8dp"
         android:background="#CE422B"
         android:outlineProvider="bounds"
         app:layout_constraintStart_toStartOf="parent"
@@ -41,5 +42,17 @@
             android:layout_height="wrap_content"
             android:orientation="vertical" />
     </ScrollView>
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="107dp"
+        android:layout_height="59dp"
+        android:layout_marginTop="16dp"
+        android:contentDescription="@string/logo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:src="@drawable/rust_logo" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

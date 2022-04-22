@@ -1,12 +1,12 @@
 package com.example.myapplication
 
+import android.annotation.SuppressLint
 import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.Gravity
-import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.setPadding
@@ -23,11 +23,11 @@ import java.util.concurrent.Executors
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    public var listOfItems = ArrayList<String>()
-    public var listOfCategories = ArrayList<String>()
-    public var listOfButtons = ArrayList<Button>()
-    public var data: ArrayAdapter<String>? = null
-    var navHostFragment: NavHostFragment? = null
+    private var listOfItems = ArrayList<String>()
+    private var listOfCategories = ArrayList<String>()
+    private var listOfButtons = ArrayList<Button>()
+    private var data: ArrayAdapter<String>? = null
+    private var navHostFragment: NavHostFragment? = null
 
 
 
@@ -58,24 +58,24 @@ class MainActivity : AppCompatActivity() {
             val body = doc.getElementById("content-body")
             val categories = body?.getElementsByTag("h2")
             for (i in 1 until (categories!!.size)){
-                listOfCategories.add(categories.get(i).text())
+                listOfCategories.add(categories[i].text())
             }
             handler.post {
                 //create buttons
-                var newBtn: Button? = null
-                var layout = findViewById<LinearLayout>(R.id.linearCategoryLayout)
+                var newBtn: Button?
+                val layout = findViewById<LinearLayout>(R.id.linearCategoryLayout)
                 val params: LinearLayout.LayoutParams = LinearLayout.LayoutParams(
                     700, 200
                 )
                 params.setMargins(0, 20, 0, 0)
                 for (i in 0 until listOfCategories.size){
                     newBtn = Button(this)
-                    newBtn.setText(listOfCategories.get(i).toString().lowercase())
+                    newBtn.text = listOfCategories[i].lowercase()
                     newBtn.setPadding(10)
                     newBtn.setTextColor(Color.parseColor("#ce422b"))
                     newBtn.setBackgroundColor(Color.parseColor("#1b1b1b"))
-                    newBtn.setTextSize(24.0F)
-                    newBtn.setTypeface(Typeface.DEFAULT_BOLD)
+                    newBtn.textSize = 24.0F
+                    newBtn.typeface = Typeface.DEFAULT_BOLD
                     newBtn.layoutParams = params
                     listOfButtons.add(newBtn)
                     layout.addView(newBtn)
@@ -83,8 +83,8 @@ class MainActivity : AppCompatActivity() {
 
                 layout.gravity = Gravity.CENTER
                 for(btn in listOfButtons){
-                    btn.setOnClickListener(){
-                        viewModel!!.setChoice(btn.text.toString())
+                    btn.setOnClickListener {
+                        viewModel.setChoice(btn.text.toString())
                         navHostFragment!!.navController.navigate(R.id.action_mainFragment_to_categoryFragment)
                     }
                 }
@@ -104,27 +104,28 @@ class MainActivity : AppCompatActivity() {
             var count = -1
             for (i in 1 until elementById!!.childrenSize()){
                 count++
-                if(elementById.getElementsByTag("h2").get(i).text().toString().equals(choice, true)){
+                if(elementById.getElementsByTag("h2")[i].text().toString().equals(choice, true)){
                     break
                 }
             }
-            var get = elementById!!.getElementsByClass("ch-item-card-wrap").get(count)
+            val get = elementById.getElementsByClass("ch-item-card-wrap")[count]
             var start = 0
-            if(choice.equals("ammunition")){
+            if(choice == "ammunition"){
                 start = 1
             }
             for (i in start until get.childrenSize()){
-                listOfItems.add(get.getElementsByClass("card").get(i).text().toString())
+                listOfItems.add(get.getElementsByClass("card")[i].text().toString())
             }
             data = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, listOfItems)
             data!!.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             handler.post {
-                spinner.setAdapter(data)
+                spinner.adapter = data
             }
         }
     }
 
     //get one item info
+    @SuppressLint("SetTextI18n")
     fun getItemData(choice: String, itemImg: ImageView, itemDescription: TextView,
                     itemID: TextView, craftTitle: TextView, reqWorkLevel: TextView,
                     craftTime: TextView, craftYield: TextView, ingredientsTitle: TextView,
@@ -132,50 +133,52 @@ class MainActivity : AppCompatActivity() {
         val executor: ExecutorService = Executors.newSingleThreadExecutor()
         val handler = Handler(Looper.getMainLooper())
 
-        if(!choice.equals("")){
+        if(choice != ""){
             executor.execute {
                 val doc: Document = Jsoup.connect("https://www.corrosionhour.com/rust-items/${choice}").get()
-                val itemInfoTable = doc.getElementsByClass("rust-item-list-common-data item-meta-table").get(0)
+                val itemInfoTable = doc.getElementsByClass("rust-item-list-common-data item-meta-table")[0]
 
                 //get crafts if available
                 val itemCraftTable = doc.getElementsByClass("rust-item-crafting-data item-meta-table")
                 val ingredientsTable = doc.getElementsByClass("rust-item-blueprint-data item-meta-table")
 
-                var table = itemInfoTable.select("table").get(0)
+                var table = itemInfoTable.select("table")[0]
                 var rows = table.select("tr")
 
                 handler.post {
                     //item image
-                    val attr = doc.getElementsByClass("featured-image").get(0).select("img").attr("src")
+                    val attr = doc.getElementsByClass("featured-image")[0].select("img").attr("src")
                     Picasso.get().load(attr).into(itemImg)
 
                     //item info
                     for (i in 1 until rows.size){
-                        var row = rows.get(i)
-                        var col = row.select("td")
-                        if(col.get(0).text().equals("ItemID")){
-                            itemID.text = "Item ID: ${col.get(1).text()}"
+                        val row = rows[i]
+                        val col = row.select("td")
+                        if(col[0].text().equals("ItemID")){
+                            itemID.text = "Item ID: ${col[1].text()}"
                         }
-                        else if(col.get(0).text().equals("Item Description")){
-                            itemDescription.text = "Item Description: ${col.get(1).text()}"
+                        else if(col[0].text().equals("Item Description")){
+                            itemDescription.text = "Item Description: ${col[1].text()}"
                         }
                     }
                     //item craft
                     if(itemCraftTable.isNotEmpty()){
                         craftTitle.text = "Crafting Info"
-                        table = itemCraftTable.get(0).select("table").get(0)
+                        table = itemCraftTable[0].select("table")[0]
                         rows = table.select("tr")
                         for (i in 1 until rows.size){
-                            var row = rows.get(i)
-                            var col = row.select("td")
-                            if(col.get(0).text().equals("Required Workbench Level")){
-                                reqWorkLevel.text = "Required Workbench Level: ${col.get(1).text()}"
-                            }
-                            else if(col.get(0).text().equals("Crafting Time")){
-                                craftTime.text = "Crafting Time: ${col.get(1).text()}"
-                            }
-                            else if(col.get(0).text().equals("Crafting Yield")){
-                                craftYield.text = "Crafting Yield: ${col.get(1).text()}"
+                            val row = rows[i]
+                            val col = row.select("td")
+                            when {
+                                col[0].text().equals("Required Workbench Level") -> {
+                                    reqWorkLevel.text = "Required Workbench Level: ${col[1].text()}"
+                                }
+                                col[0].text().equals("Crafting Time") -> {
+                                    craftTime.text = "Crafting Time: ${col[1].text()}"
+                                }
+                                col[0].text().equals("Crafting Yield") -> {
+                                    craftYield.text = "Crafting Yield: ${col[1].text()}"
+                                }
                             }
                         }
                     }
@@ -183,12 +186,12 @@ class MainActivity : AppCompatActivity() {
                     if(ingredientsTable.isNotEmpty()){
                         ingredientsTitle.text = "Crafting Ingredients"
                         var list = ""
-                        table = ingredientsTable.get(0).select("table").get(0)
+                        table = ingredientsTable[0].select("table")[0]
                         rows = table.select("tr")
                         for (i in 1 until rows.size){
-                            var row = rows.get(i)
-                            var col = row.select("td")
-                            list += "${col.get(1).text()}: ${col.get(2).text()}\n"
+                            val row = rows[i]
+                            val col = row.select("td")
+                            list += "${col[1].text()}: ${col[2].text()}\n"
                         }
                         ingredientsList.text = list
                     }

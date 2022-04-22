@@ -19,7 +19,7 @@ class MainFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         (activity as AppCompatActivity).supportActionBar?.title = "Category"
         _binding = FragmentMainBinding.inflate(inflater, container, false)
@@ -33,9 +33,5 @@ class MainFragment : Fragment() {
         _binding = null
     }
 
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        }
 
 }

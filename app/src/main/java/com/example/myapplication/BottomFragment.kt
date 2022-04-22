@@ -17,16 +17,25 @@ class BottomFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentBottomBinding.inflate(inflater, container, false)
 
-        viewModel!!.item.observe(viewLifecycleOwner, { item ->
+        viewModel.item.observe(viewLifecycleOwner) { item ->
             binding.itemName.text = item.toString()
             resetTextViews()
-            (activity as MainActivity?)!!.getItemData(changeSpacesToSlashes(),binding.itemImage, binding.itemDescription,
-                binding.itemID, binding.craftDataTitle, binding.reqWorkLevel, binding.craftingTime, binding.craftingYield,
-                binding.ingredientsTitle, binding.ingredientsList)
-        })
+            (activity as MainActivity?)!!.getItemData(
+                changeSpacesToSlashes(),
+                binding.itemImage,
+                binding.itemDescription,
+                binding.itemID,
+                binding.craftDataTitle,
+                binding.reqWorkLevel,
+                binding.craftingTime,
+                binding.craftingYield,
+                binding.ingredientsTitle,
+                binding.ingredientsList
+            )
+        }
 
         return binding.root
     }
@@ -35,7 +44,7 @@ class BottomFragment : Fragment() {
         _binding = null
     }
 
-    fun resetTextViews(){
+    private fun resetTextViews(){
         binding.craftDataTitle.text = ""
         binding.reqWorkLevel.text = ""
         binding.craftingTime.text = ""
@@ -44,9 +53,9 @@ class BottomFragment : Fragment() {
         binding.ingredientsList.text = ""
     }
 
-    fun changeSpacesToSlashes() : String{
+    private fun changeSpacesToSlashes() : String{
         val split = viewModel.item.value.toString().split(" ")
-        var result: String = ""
+        var result = ""
         for (i in 0 until split.size){
             result += split[i]
             if(i != split.size - 1){

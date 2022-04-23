@@ -18,7 +18,7 @@ class TopFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         _binding = FragmentTopBinding.inflate(inflater, container, false)
 
@@ -30,7 +30,7 @@ class TopFragment : Fragment() {
             AdapterView.OnItemSelectedListener {
 
             override fun onItemSelected(dropdown: AdapterView<*>?, p1: View?, position: Int, p3: Long) {
-                viewModel!!.setItem(dropdown?.getItemAtPosition(position).toString())
+                viewModel.setItem(dropdown?.getItemAtPosition(position).toString())
             }
 
             override fun onNothingSelected(p0: AdapterView<*>?) {
@@ -43,5 +43,10 @@ class TopFragment : Fragment() {
         }
 
         return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

@@ -12,6 +12,7 @@
         android:layout_width="328dp"
         android:layout_height="48dp"
         android:background="#F6E9E0"
+        android:textSize="25sp"
         android:contentDescription="@string/hello_blank_fragment"
         android:popupBackground="#F6E9E0"
         app:layout_constraintEnd_toEndOf="parent"

@@ -17,20 +17,45 @@ class BottomFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentBottomBinding.inflate(inflater, container, false)
 
-        viewModel!!.item.observe(viewLifecycleOwner, { item ->
+        viewModel.item.observe(viewLifecycleOwner) { item ->
             binding.itemName.text = item.toString()
-            (activity as MainActivity?)!!.getItemData(changeSpacesToSlashes(),binding.itemImage, binding.itemDescription, binding.itemID)
-        })
+            resetTextViews()
+            (activity as MainActivity?)!!.getItemData(
+                changeSpacesToSlashes(),
+                binding.itemImage,
+                binding.itemDescription,
+                binding.itemID,
+                binding.craftDataTitle,
+                binding.reqWorkLevel,
+                binding.craftingTime,
+                binding.craftingYield,
+                binding.ingredientsTitle,
+                binding.ingredientsList
+            )
+        }
 
         return binding.root
     }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 
-    fun changeSpacesToSlashes() : String{
+    private fun resetTextViews(){
+        binding.craftDataTitle.text = ""
+        binding.reqWorkLevel.text = ""
+        binding.craftingTime.text = ""
+        binding.craftingYield.text = ""
+        binding.ingredientsTitle.text = ""
+        binding.ingredientsList.text = ""
+    }
+
+    private fun changeSpacesToSlashes() : String{
         val split = viewModel.item.value.toString().split(" ")
-        var result: String = ""
+        var result = ""
         for (i in 0 until split.size){
             result += split[i]
             if(i != split.size - 1){
